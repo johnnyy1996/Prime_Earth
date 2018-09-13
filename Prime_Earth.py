@@ -1,6 +1,15 @@
 #DC: Battle for Prime Earth!
 
 from graphics import *
+import time
+
+def countdown(window, Point, t):
+    while t:
+        count = Text(Point,str(t)).draw(window)
+        time.sleep(1)
+        t -= 1
+        count.undraw()
+    print('Perish Song!')
 
 class button: 
     def __init__(self, win, center, width, height, label):
@@ -55,23 +64,70 @@ class heroes_and_villains:
         print("SpDefense:", self.SpDefense)
         print("Speed:", self.Speed)
 
-    #def __init__(self, name, power, defense, speed, health, attack1, attack2, attack3, attack4):
-#        self.name = name
-#        self.power = power
-#        self.defense = defense
-#        self.speed = speed
-#        self.health = health
-#        self.attack1 = attack1
-#        self.attack2 = attack2
-#        self.attack3 = attack3
-#        self.attack4 = attack4
-        #special should be removed for now until it can be efficiently added to the game
-        #self.special = special
+class HeroAttacks:
+    def __init__(self,Name, HP, Attack, Defense, SpAttack, SpDefense, Speed, Attacks):
+        self.Name = Name
+        self.HP = HP
+        self.Attack = Attack
+        self.Defense = Defense
+        self.SpAttack = SpAttack
+        self.SpDefense = SpDefense
+        self.Speed = Speed
+        self.Attack1 = Attacks.Attack1
+        self.Attack2 = Attacks.Attack2
+        self.Attack3 = Attacks.Attack3
+        self.Attack4 = Attacks.Attack4
+        self.Attack1Power = Attacks.Attack1Power
+        self.Attack2Power = Attacks.Attack2Power
+        self.Attack3Power = Attacks.Attack3Power
+        self.Attack4Power = Attacks.Attack4Power
+        self.Attack1Accuracy = Attacks.Attack1Accuracy
+        self.Attack2Accuracy = Attacks.Attack2Accuracy
+        self.Attack3Accuracy = Attacks.Attack3Accuracy
+        self.Attack4Accuracy = Attacks.Attack4Accuracy
 
-    #def attack1():
+    def printStats(self):
+        print("Name:", self.Name)
+        print("HP:", self.HP)
+        print("Attack:", self.Attack)
+        print("Defense:", self.Defense)
+        print("SpAttack:", self.SpAttack)
+        print("SpDefense:", self.SpDefense)
+        print("Speed:", self.Speed)
+        print("\n")
 
-        #have a function to print out the character info in the info screen
+    def printAttacks(self):
+        print("Attack:", self.Attack1)
+        print("Power:", self.Attack1Power)
+        print("Accuracy:", self.Attack1Accuracy)
+        print("\n")
+        print("Attack:", self.Attack2)
+        print("Power:", self.Attack2Power)
+        print("Accuracy:", self.Attack2Accuracy)
+        print("\n")
+        print("Attack:", self.Attack3)
+        print("Power:", self.Attack3Power)
+        print("Accuracy:", self.Attack3Accuracy)
+        print("\n")
+        print("Attack:", self.Attack4)
+        print("Power:", self.Attack4Power)
+        print("Accuracy:", self.Attack4Accuracy)
+        print("\n")
 
+class Attacks:
+    def __init__(self, Attack1, Attack1Power, Attack1Accuracy, Attack2, Attack2Power, Attack2Accuracy, Attack3, Attack3Power, Attack3Accuracy, Attack4, Attack4Power, Attack4Accuracy):
+        self.Attack1 = Attack1
+        self.Attack2 = Attack2
+        self.Attack3 = Attack3
+        self.Attack4 = Attack4
+        self.Attack1Power = Attack1Power
+        self.Attack2Power = Attack2Power
+        self.Attack3Power = Attack3Power
+        self.Attack4Power = Attack4Power
+        self.Attack1Accuracy = Attack1Accuracy
+        self.Attack2Accuracy = Attack2Accuracy
+        self.Attack3Accuracy = Attack3Accuracy
+        self.Attack4Accuracy = Attack4Accuracy
 
 
 def welcome(window):
@@ -221,19 +277,19 @@ def username_password_match(username, password):
 def mainMenu(window):
     returnButtonPressed = True
     while returnButtonPressed:
-        start = button(window,Point(25, 37.5), 20, 5, "Start")
+        startButton = button(window,Point(25, 37.5), 20, 5, "Start")
         characterInfo = button(window,Point(25, 27.5), 20, 5, "Characters")
         leaderboardsButton = button(window,Point(25, 17.5), 20, 5, "Leaderboards")
         _quit_ = button(window,Point(25, 7.5), 20, 5, "Quit")
         pt = window.getMouse()
-        while not (start.clicked(pt) or characterInfo.clicked(pt) or leaderboardsButton.clicked(pt) or _quit_.clicked(pt)):
+        while not (startButton.clicked(pt) or characterInfo.clicked(pt) or leaderboardsButton.clicked(pt) or _quit_.clicked(pt)):
             pt = window.getMouse()
-        start.remove()
+        startButton.remove()
         characterInfo.remove()
         leaderboardsButton.remove()
         _quit_.remove()
-        if start.clicked(pt):
-            print("continue")
+        if startButton.clicked(pt):
+            start(window)
             returnButtonPressed = False
         elif characterInfo.clicked(pt):
             character(window)       
@@ -243,7 +299,59 @@ def mainMenu(window):
             quitWindow(window)
             returnButtonPressed = False
         
-#def start():
+def start(window):
+    text1 = Text(Point(25, 47), "Choose Your").draw(window)
+    text2 = Text(Point(25, 44), "Character").draw(window)
+    char1 = button(window,Point(25, 35), 22, 4, "Mewtwo")
+    char2 = button(window,Point(25, 29), 22, 4, "Lugia")
+    char3 = button(window,Point(25, 23), 22, 4, "Ho-oh")
+    char4 = button(window,Point(25, 17), 22, 4, "Rayquaza")
+    char5 = button(window,Point(25, 11), 22, 4, "Dialga")
+    char6 = button(window,Point(25, 5), 22, 4, "Palkia")
+    pt = window.getMouse()
+    while not (char1.clicked(pt) or char2.clicked(pt) or char3.clicked(pt) or char4.clicked(pt) or char5.clicked(pt) or char6.clicked(pt)):
+        pt = window.getMouse()
+    text1.undraw()
+    text2.undraw()
+    char1.remove()
+    char2.remove()
+    char3.remove()
+    char4.remove()
+    char5.remove()
+    char6.remove()
+    if char1.clicked(pt):
+        char1Attacks = Attacks("Psystrike", 100, 1.0, "Ice Beam", 90, 1.0, "Fire Blast", 110, .85, "Focus Blast", 120, .70)
+        char1Name = HeroAttacks("Mewtwo", 106, 110, 90, 154, 90, 130, char1Attacks)
+        char1Name.printStats()
+        char1Name.printAttacks()
+    elif char2.clicked(pt):
+        char2Attacks = Attacks("Aeroblast", 100, .95, "Blizzard", 110, .70, "Hydro Pump", 110, .80, "Thunderbolt", 90, 1.0)
+        char2Name = HeroAttacks("Lugia", 106, 110, 90, 154, 90, 130, char2Attacks)
+        char2Name.printStats()
+        char2Name.printAttacks()
+    elif char3.clicked(pt):
+        char3Attacks = Attacks("Sacred Fire", 100, .95, "Earthquake", 100, 1.0, "Thunder", 110, .70, "Fire Blast", 110, .85)
+        char3Name = HeroAttacks("Ho-oh", 106, 110, 90, 154, 90, 130, char3Attacks)
+        char3Name.printStats()
+        char3Name.printAttacks()
+    elif char4.clicked(pt):
+        char4Attacks = Attacks("Dragon Ascent", 120, 1.0, "Extreme Speed", 80, 1.0, "Iron Tail", 100, .75, "V-create", 180, .95)
+        char3Name = HeroAttacks("Rayquaza", 106, 110, 90, 154, 90, 130, char4Attacks)
+        char3Name.printStats()
+        char3Name.printAttacks()
+    elif char5.clicked(pt):
+        char5Attacks = Attacks("Draco Meteor", 130, .90, "Earth Power", 90, 1.0, "Roar of Time", 150, .90, "Flamethrower", 90, 1.0)
+        char5 = HeroAttacks("Dialga", 106, 110, 90, 154, 90, 130, char5Attacks)
+        char5.printStats()
+        char5.printAttacks()
+    elif char6.clicked(pt):
+        char6Attacks = Attacks("Spacial Rend", 100, .95, "Focust Punch", 150, 1.0, "Aqua Tail", 90, .90, "Stone Edge", 100, .80)
+        char6 = HeroAttacks("Palkia", 106, 110, 90, 154, 90, 130, char6Attacks)
+        char6.printStats()
+        char6.printAttacks()
+
+#def game(window, character):
+        
 
 def character(window):
     charButtonPressed = True
@@ -336,7 +444,9 @@ def quitWindow(window):
 def main():
     win = GraphWin("Battle for Prime Earth")
     win.setCoords(0,0,50,50)
-    welcome(win)
+    #countdown(win, Point(25,25), 99)
+    mainMenu(win)
+    #welcome(win)
     if win.getMouse():
         win.close()
     
